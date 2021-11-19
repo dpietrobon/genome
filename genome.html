@@ -1,0 +1,481 @@
+<html>
+
+<canvas id = "canvas" width = "2000" height = "2000"></canvas>
+
+
+<script src = "drawing_functions.js"></script>
+<script src = "genome.js"></script>
+<script>
+
+var canvas = document.getElementById( 'canvas' );
+var ctx = canvas.getContext( '2d' );
+
+let height = 2000;
+let width = 2000;
+let N = height*width;
+
+var alternating = false;
+let x, y;
+let k = 1; // k times zoom
+
+/* plots the individual bases */
+
+/*
+
+for ( let n = 0; n < 3*(N+1/51); n++ ){
+    if ( mod(n,51) !== 0 ){
+        
+        y = Math.floor( ( n - Math.floor(n/51) )/width );
+        
+        if ( mod(y,2) == 0 &&  alternating ){
+            x = width - mod( n - Math.floor(n/51), width );
+        }
+        else {
+            x = mod( n - Math.floor(n/51), width );
+        }
+        
+        if (chr1[n] == 'N'){
+            drawRectangle( k*x,k*y,k*x+k,k*y+k,'white' );
+        }
+        else if ( chr1[n] == 'G' || chr1[n] == 'g' ){
+            drawRectangle( k*x,k*y,k*(x+1),k*(y+1),'red' );
+        }
+        else if ( chr1[n] == 'T' || chr1[n] == 't' ){
+            drawRectangle( k*x,k*y,k*(x+1),k*(y+1),'blue' );
+        }
+        else if ( chr1[n] == 'A' || chr1[n] == 'a' ){
+            drawRectangle( k*x,k*y,k*(x+1),k*(y+1),'cyan' );
+        }
+        else if ( chr1[n] == 'C' || chr1[n] == 'c' ){
+            drawRectangle( k*x,k*y,k*(x+1),k*(y+1),'yellow'  );
+        }
+    }
+}
+
+*/
+
+// codons 
+
+let T = []; // tempCodon 
+
+x = 0;
+y = 0;
+
+let c = ['red','orange','yellow','lime','green','cyan','blue','purple','magenta', 'maroon',
+               'brown', 'olive', 'teal', 'pink', 'apricot', 'mint','lavender', 'navy','beige','grey','black'];
+
+for ( let n = 0; n < 3*(N+1/51); n++ ){
+    if ( mod(n,51) !== 0 ){
+        
+        T.push ( chr1[n] );
+        
+        
+        if ( T.length == 3 ){
+        
+        
+            if ( n > 10110 && n < 10220 ){ console.log( T[0],T[1],T[2] ); }
+            
+            // phenylalanine
+            if ( ( T[0] == 'T' || T[0] == 't' ) && 
+                    ( T[1] == 'T' || T[1] == 't' ) && 
+                    ( T[2] == 'T' || T[2] == 't' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[0] );
+            }
+            if ( ( T[0] == 'T' || T[0] == 't' ) && 
+                    ( T[1] == 'T' || T[1] == 't' ) && 
+                    ( T[2] == 'C' || T[2] == 'c' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[0] );
+            }
+            
+            // leucine 
+            if ( ( T[0] == 'T' || T[0] == 't' ) && 
+                    ( T[1] == 'T' || T[1] == 't' ) && 
+                    ( T[2] == 'A' || T[2] == 'a' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[1] );
+            }
+            if ( ( T[0] == 'T' || T[0] == 't' ) && 
+                    ( T[1] == 'T' || T[1] == 't' ) && 
+                    ( T[2] == 'G' || T[2] == 'g' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[1] );
+            }
+            if ( ( T[0] == 'C' || T[0] == 'c' ) && 
+                    ( T[1] == 'T' || T[1] == 't' ) && 
+                    ( T[2] == 'T' || T[2] == 't' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[1] );
+            }
+            if ( ( T[0] == 'C' || T[0] == 'c' ) && 
+                    ( T[1] == 'T' || T[1] == 't' ) && 
+                    ( T[2] == 'C' || T[2] == 'c' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[1] );
+            }
+            if ( ( T[0] == 'C' || T[0] == 'c' ) && 
+                    ( T[1] == 'T' || T[1] == 't' ) && 
+                    ( T[2] == 'A' || T[2] == 'a' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[1] );
+            }
+            if ( ( T[0] == 'C' || T[0] == 'c' ) && 
+                    ( T[1] == 'T' || T[1] == 't' ) && 
+                    ( T[2] == 'G' || T[2] == 'g' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[1] );
+            }
+            
+            // isoleucine 
+            if ( ( T[0] == 'A' || T[0] == 'a' ) && 
+                    ( T[1] == 'T' || T[1] == 't' ) && 
+                    ( T[2] == 'T' || T[2] == 't' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[2] );
+            }
+            if ( ( T[0] == 'A' || T[0] == 'a' ) && 
+                    ( T[1] == 'T' || T[1] == 't' ) && 
+                    ( T[2] == 'C' || T[2] == 'c' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[2] );
+            }
+            if ( ( T[0] == 'A' || T[0] == 'a' ) && 
+                    ( T[1] == 'T' || T[1] == 't' ) && 
+                    ( T[2] == 'A' || T[2] == 'a' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[2] );
+            }
+            
+            // methionine 
+            if ( ( T[0] == 'A' || T[0] == 'a' ) && 
+                    ( T[1] == 'T' || T[1] == 't' ) && 
+                    ( T[2] == 'G' || T[2] == 'g' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[3] );
+            }
+            
+            // valine 
+            if ( ( T[0] == 'G' || T[0] == 'g' ) && 
+                    ( T[1] == 'T' || T[1] == 't' ) && 
+                    ( T[2] == 'T' || T[2] == 't' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[4] );
+            }
+            if ( ( T[0] == 'G' || T[0] == 'g' ) && 
+                    ( T[1] == 'T' || T[1] == 't' ) && 
+                    ( T[2] == 'C' || T[2] == 'c' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[4] );
+            }
+            if ( ( T[0] == 'G' || T[0] == 'g' ) && 
+                    ( T[1] == 'T' || T[1] == 't' ) && 
+                    ( T[2] == 'A' || T[2] == 'a' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[4] );
+            }
+            if ( ( T[0] == 'G' || T[0] == 'g' ) && 
+                    ( T[1] == 'T' || T[1] == 't' ) && 
+                    ( T[2] == 'G' || T[2] == 'g' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[4] );
+            }
+            
+            // serine - a 
+            if ( ( T[0] == 'T' || T[0] == 't' ) && 
+                    ( T[1] == 'C' || T[1] == 'c' ) && 
+                    ( T[2] == 'T' || T[2] == 't' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[5] );
+            }
+            if ( ( T[0] == 'T' || T[0] == 't' ) && 
+                    ( T[1] == 'C' || T[1] == 'c' ) && 
+                    ( T[2] == 'C' || T[2] == 'c' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[5] );
+            }
+            if ( ( T[0] == 'T' || T[0] == 't' ) && 
+                    ( T[1] == 'C' || T[1] == 'c' ) && 
+                    ( T[2] == 'A' || T[2] == 'a' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[5] );
+            }
+            if ( ( T[0] == 'T' || T[0] == 't' ) && 
+                    ( T[1] == 'C' || T[1] == 'c' ) && 
+                    ( T[2] == 'G' || T[2] == 'g' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[5] );
+            }
+            // serine - b 
+            if ( ( T[0] == 'A' || T[0] == 'a' ) && 
+                    ( T[1] == 'G' || T[1] == 'g' ) && 
+                    ( T[2] == 'T' || T[2] == 't' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[5] );
+            }
+            if ( ( T[0] == 'A' || T[0] == 'a' ) && 
+                    ( T[1] == 'G' || T[1] == 'g' ) && 
+                    ( T[2] == 'C' || T[2] == 'c' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[5] );
+            }
+            
+            // proline 
+            if ( ( T[0] == 'C' || T[0] == 'c' ) && 
+                    ( T[1] == 'C' || T[1] == 'c' ) && 
+                    ( T[2] == 'T' || T[2] == 't' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[6] );
+            }
+            if ( ( T[0] == 'C' || T[0] == 'c' ) && 
+                    ( T[1] == 'C' || T[1] == 'c' ) && 
+                    ( T[2] == 'C' || T[2] == 'c' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[6] );
+            }
+            if ( ( T[0] == 'C' || T[0] == 'c' ) && 
+                    ( T[1] == 'C' || T[1] == 'c' ) && 
+                    ( T[2] == 'A' || T[2] == 'a' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k,c[6] );
+            }
+            if ( ( T[0] == 'C' || T[0] == 'c' ) && 
+                    ( T[1] == 'C' || T[1] == 'c' ) && 
+                    ( T[2] == 'G' || T[2] == 'g' ) ){
+                drawRectangle( k*x, k*y,  k*x+k, k*y+k, c[6] );
+            }
+            
+            // threonine 
+            if ( ( T[0] == 'A' || T[0] == 'a' ) && 
+                    ( T[1] == 'C' || T[1] == 'c' ) && 
+                    ( T[2] == 'T' || T[2] == 't' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[7] );
+            }
+            if ( ( T[0] == 'A' || T[0] == 'a' ) && 
+                    ( T[1] == 'C' || T[1] == 'c' ) && 
+                    ( T[2] == 'C' || T[2] == 'c' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[7] );
+            }
+            if ( ( T[0] == 'A' || T[0] == 'a' ) && 
+                    ( T[1] == 'C' || T[1] == 'c' ) && 
+                    ( T[2] == 'A' || T[2] == 'a' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k,c[7] );
+            }
+            if ( ( T[0] == 'A' || T[0] == 'a' ) && 
+                    ( T[1] == 'C' || T[1] == 'c' ) && 
+                    ( T[2] == 'G' || T[2] == 'g' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[7] );
+            }
+            
+            // alanine 
+            if ( ( T[0] == 'G' || T[0] == 'g' ) && 
+                    ( T[1] == 'C' || T[1] == 'c' ) && 
+                    ( T[2] == 'T' || T[2] == 't' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[8] );
+            }
+            if ( ( T[0] == 'G' || T[0] == 'g' ) && 
+                    ( T[1] == 'C' || T[1] == 'c' ) && 
+                    ( T[2] == 'C' || T[2] == 'c' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[8] );
+            }
+            if ( ( T[0] == 'G' || T[0] == 'g' ) && 
+                    ( T[1] == 'C' || T[1] == 'c' ) && 
+                    ( T[2] == 'A' || T[2] == 'a' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k,c[8] );
+            }
+            if ( ( T[0] == 'G' || T[0] == 'g' ) && 
+                    ( T[1] == 'C' || T[1] == 'c' ) && 
+                    ( T[2] == 'G' || T[2] == 'g' ) ){
+                drawRectangle( k*x,k*y, k*x+k, k*y+k, c[8] );
+            }
+            
+            // tyrosine 
+            if ( ( T[0] == 'T' || T[0] == 't' ) && 
+                    ( T[1] == 'A' || T[1] == 'a' ) && 
+                    ( T[2] == 'T' || T[2] == 't' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[9] );
+            }
+            if ( ( T[0] == 'T' || T[0] == 't' ) && 
+                    ( T[1] == 'A' || T[1] == 'a' ) && 
+                    ( T[2] == 'C' || T[2] == 'c' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[9] );
+            }
+            
+            // histidine 
+            if ( ( T[0] == 'C' || T[0] == 'c' ) && 
+                    ( T[1] == 'A' || T[1] == 'a' ) && 
+                    ( T[2] == 'T' || T[2] == 't' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[10] );
+            }
+            if ( ( T[0] == 'C' || T[0] == 'c' ) && 
+                    ( T[1] == 'A' || T[1] == 'a' ) && 
+                    ( T[2] == 'C' || T[2] == 'c' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[10] );
+            }
+            
+            // glutamine 
+            if ( ( T[0] == 'C' || T[0] == 'c' ) && 
+                    ( T[1] == 'A' || T[1] == 'a' ) && 
+                    ( T[2] == 'A' || T[2] == 'a' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[11] );
+            }
+            if ( ( T[0] == 'C' || T[0] == 'c' ) && 
+                    ( T[1] == 'A' || T[1] == 'a' ) && 
+                    ( T[2] == 'G' || T[2] == 'g' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[11] );
+            }
+            
+            // asparagine 
+            if ( ( T[0] == 'A' || T[0] == 'a' ) && 
+                    ( T[1] == 'A' || T[1] == 'a' ) && 
+                    ( T[2] == 'T' || T[2] == 't' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[12] );
+            }
+            if ( ( T[0] == 'A' || T[0] == 'a' ) && 
+                    ( T[1] == 'A' || T[1] == 'a' ) && 
+                    ( T[2] == 'C' || T[2] == 'c' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[12] );
+            }
+            
+            // lysine 
+            if ( ( T[0] == 'A' || T[0] == 'a' ) && 
+                    ( T[1] == 'A' || T[1] == 'a' ) && 
+                    ( T[2] == 'A' || T[2] == 'a' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[13] );
+            }
+            if ( ( T[0] == 'A' || T[0] == 'a' ) && 
+                    ( T[1] == 'A' || T[1] == 'a' ) && 
+                    ( T[2] == 'G' || T[2] == 'g' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[13] );
+            }
+            
+            // aspartate 
+            if ( ( T[0] == 'G' || T[0] == 'g' ) && 
+                    ( T[1] == 'A' || T[1] == 'a' ) && 
+                    ( T[2] == 'T' || T[2] == 't' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[14] );
+            }
+            if ( ( T[0] == 'G' || T[0] == 'g' ) && 
+                    ( T[1] == 'A' || T[1] == 'a' ) && 
+                    ( T[2] == 'C' || T[2] == 'c' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[14] );
+            }
+            
+            // glutamate 
+            if ( ( T[0] == 'G' || T[0] == 'g' ) && 
+                    ( T[1] == 'A' || T[1] == 'a' ) && 
+                    ( T[2] == 'A' || T[2] == 'a' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[15] );
+            }
+            if ( ( T[0] == 'G' || T[0] == 'g' ) && 
+                    ( T[1] == 'A' || T[1] == 'a' ) && 
+                    ( T[2] == 'G' || T[2] == 'g' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[15] );
+            }
+            
+            // cysteine 
+            if ( ( T[0] == 'T' || T[0] == 't' ) && 
+                    ( T[1] == 'G' || T[1] == 'g' ) && 
+                    ( T[2] == 'T' || T[2] == 't' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[16] );
+            }
+            if ( ( T[0] == 'T' || T[0] == 't' ) && 
+                    ( T[1] == 'G' || T[1] == 'g' ) && 
+                    ( T[2] == 'C' || T[2] == 'c' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[16] );
+            }
+            
+            // tryptophan 
+            if ( ( T[0] == 'T' || T[0] == 't' ) && 
+                    ( T[1] == 'G' || T[1] == 'g' ) && 
+                    ( T[2] == 'G' || T[2] == 'g' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[17] );
+            }
+            
+            // arginine - a 
+            if ( ( T[0] == 'C' || T[0] == 'c' ) && 
+                    ( T[1] == 'G' || T[1] == 'g' ) && 
+                    ( T[2] == 'T' || T[2] == 't' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[18] );
+            }
+            if ( ( T[0] == 'C' || T[0] == 'c' ) && 
+                    ( T[1] == 'G' || T[1] == 'g' ) && 
+                    ( T[2] == 'C' || T[2] == 'c' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[18] );
+            }
+            if ( ( T[0] == 'C' || T[0] == 'c' ) && 
+                    ( T[1] == 'G' || T[1] == 'g' ) && 
+                    ( T[2] == 'A' || T[2] == 'a' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[18] );
+            }
+            if ( ( T[0] == 'C' || T[0] == 'c' ) && 
+                    ( T[1] == 'G' || T[1] == 'g' ) && 
+                    ( T[2] == 'G' || T[2] == 'g' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[18] );
+            }
+            // arginine - b 
+            if ( ( T[0] == 'A' || T[0] == 'a' ) && 
+                    ( T[1] == 'G' || T[1] == 'g' ) && 
+                    ( T[2] == 'A' || T[2] == 'a' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[18] );
+            }
+            if ( ( T[0] == 'A' || T[0] == 'a' ) && 
+                    ( T[1] == 'G' || T[1] == 'g' ) && 
+                    ( T[2] == 'G' || T[2] == 'g' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[18] );
+            }
+            
+            // glycine 
+            if ( ( T[0] == 'G' || T[0] == 'g' ) && 
+                    ( T[1] == 'G' || T[1] == 'g' ) && 
+                    ( T[2] == 'T' || T[2] == 't' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[19] );
+            }
+            if ( ( T[0] == 'G' || T[0] == 'g' ) && 
+                    ( T[1] == 'G' || T[1] == 'g' ) && 
+                    ( T[2] == 'C' || T[2] == 'c' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[19] );
+            }
+            if ( ( T[0] == 'G' || T[0] == 'g' ) && 
+                    ( T[1] == 'G' || T[1] == 'g' ) && 
+                    ( T[2] == 'A' || T[2] == 'a' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[19] );
+            }
+            if ( ( T[0] == 'G' || T[0] == 'g' ) && 
+                    ( T[1] == 'G' || T[1] == 'g' ) && 
+                    ( T[2] == 'G' || T[2] == 'g' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[19] );
+            }
+            
+            // stop codons 
+            if ( ( T[0] == 'T' || T[0] == 't' ) && 
+                    ( T[1] == 'A' || T[1] == 'a' ) && 
+                    ( T[2] == 'A' || T[2] == 'a' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[20] );
+            }
+            if ( ( T[0] == 'T' || T[0] == 't' ) && 
+                    ( T[1] == 'A' || T[1] == 'a' ) && 
+                    ( T[2] == 'G' || T[2] == 'g' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[20] );
+            }
+            if ( ( T[0] == 'T' || T[0] == 't' ) && 
+                    ( T[1] == 'G' || T[1] == 'g' ) && 
+                    ( T[2] == 'A' || T[2] == 'a' ) ){
+                drawRectangle( k*x, k*y, k*x+k, k*y+k, c[20] );
+            }
+            
+            
+            
+            if ( mod( x + 1, width) == 0 ){ y++; }
+            x = mod( x + 1, width )
+            
+            T = [];
+            
+        }
+        
+        
+        
+        // go through getting every triplet of codons but ignoring the newline character every 51 characters 
+        /*
+        y = Math.floor( ( n - Math.floor(n/51) )/width );
+        
+        if (chr1[n] == 'N'){
+            drawRectangle( k*x,k*y,k*x+k,k*y+k,'white' );
+        }
+        else if ( chr1[n] == 'G' || chr1[n] == 'g' ){
+            drawRectangle( k*x,k*y,k*(x+1),k*(y+1),'red' );
+        }
+        else if ( chr1[n] == 'T' || chr1[n] == 't' ){
+            drawRectangle( k*x,k*y,k*(x+1),k*(y+1),'blue' );
+        }
+        else if ( chr1[n] == 'A' || chr1[n] == 'a' ){
+            drawRectangle( k*x,k*y,k*(x+1),k*(y+1),'cyan' );
+        }
+        else if ( chr1[n] == 'C' || chr1[n] == 'c' ){
+            drawRectangle( k*x,k*y,k*(x+1),k*(y+1),'yellow'  );
+        }
+        */
+        
+    }
+}
+
+// PLOTS the first N CODONS 
+
+</script>
+
+</html>
